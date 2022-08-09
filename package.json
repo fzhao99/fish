@@ -1,0 +1,14 @@
+{
+  "name": "fish",
+  "version": "1.0.0",
+  "description": "hacked together version of fish",
+  "main": "game.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bob Zhao",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}
