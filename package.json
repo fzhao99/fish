@@ -9,6 +9,7 @@
   "author": "Bob Zhao",
   "license": "ISC",
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "zimjs": "^13.0.1"
   }
 }

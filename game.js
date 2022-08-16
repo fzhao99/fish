@@ -1,6 +1,5 @@
-// import { cloneDeep } from "lodash";
-
 const suites = ["♣️", "♠️", "♥️", "♦️"];
+
 const numbers = [
   "A",
   "2",
@@ -16,12 +15,15 @@ const numbers = [
   "Q",
   "K",
 ];
-const jokers = ["Colored Joker", "Black Joker"];
+const jokers = ["🤡⬛", "🤡🟥"];
+
+const NUM_PLAYERS = 6;
+const DECK_SIZE = 54;
 
 class Deck {
   constructor() {
     this.cards = this.shuffle(this.generateCards());
-    this.cardsLeft = 54;
+    this.cardsLeft = DECK_SIZE;
   }
 
   generateCards() {
@@ -56,8 +58,6 @@ class Deck {
   }
 }
 
-const NUM_PLAYERS = 6;
-
 class Game {
   constructor() {
     this.gameDeck = new Deck();
@@ -83,4 +83,46 @@ class Game {
 }
 
 const game = new Game();
-console.log(game);
+const stage = new createjs.Stage("game-canvas");
+createjs.Touch.enable(stage);
+
+const BEGIN_Y = 50;
+const BEGIN_X = 50;
+const CARD_WIDTH = 105;
+const CARD_HEIGHT = 150;
+const X_CARD_GUTTER = 50;
+const Y_CARD_GUTTER = 50;
+const CARD_TEXT_HEIGHT = 30;
+
+game.playerHands.forEach((hand, handIdx) => {
+  hand.forEach((card, cardIdx) => {
+    const cardStartX = BEGIN_X + (X_CARD_GUTTER + CARD_WIDTH) * cardIdx;
+    const cardStartY = BEGIN_Y + (Y_CARD_GUTTER + CARD_HEIGHT) * handIdx;
+
+    const cardText = new createjs.Text(
+      card,
+      `${CARD_TEXT_HEIGHT}px monospace`,
+      "black"
+    );
+
+    const cardRect = new createjs.Shape();
+    cardRect.graphics
+      .beginStroke("black")
+      .drawRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
+
+    const cardContainer = new createjs.Container();
+    cardContainer.x = cardStartX;
+    cardContainer.y = cardStartY;
+    cardContainer.addChild(cardRect, cardText);
+    stage.addChild(cardContainer);
+
+    cardContainer.on("pressmove", function (evt) {
+      console.log(evt);
+      evt.currentTarget.x = evt.stageX;
+      evt.currentTarget.y = evt.stageY;
+      stage.update();
+    });
+
+    stage.update();
+  });
+});
